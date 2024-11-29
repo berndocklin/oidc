@@ -1,0 +1,13 @@
+{
+    "java.project.sourcePaths": ["src/main/java", "src/test/java"],
+    "java.project.referencedLibraries": [
+        "target/lib/**/*.jar"
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "java.test.config": {
+        "env": {
+            "name": "DOCKER_HOST",
+            "value": "unix:///Users/bernhard.ocklin/.colima/docker.sock"
+        }
+    }
+}
