@@ -11,6 +11,7 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.text.ParseException;
 
 import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.proc.BadJOSEException;
 
 class ClientCredentialFlow {
@@ -55,20 +56,41 @@ class ClientCredentialFlow {
         }
         if(response != null) {
             body = response.body().toString();
-            System.out.println(response.statusCode() + " " + body);
         }
 
         return Tools.extractAccessToken(body);
     }
 
-    public static void main(String args[]){  
+    public static void main(String args[]){
+
         ClientCredentialFlow oidc = new ClientCredentialFlow();
+
+        try {
+            Config.init("http://localhost:8080/realms/hcd");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+        //Session.createSession("myclient", "7NZ6kLMp52PC7VCqn7KmbbqKiiePKrvs");
+        Session.createSession("myclient2", "UxDW2aXyvkyHITc9L4pQd7jCsWpcrQc1");
+
         String accessToken = null;
         try {
             accessToken = oidc.getAuthorizationCode();
         } catch (Exception e) {
             System.out.println("Could not fetch configuration from Keycloak due to " + e.getMessage());
         }
+
+        JWSObject jwsObject = null;
+        try {
+            jwsObject = JWSObject.parse(accessToken);
+            // payload extraction ... just here for debugging
+            System.out.println("accessToken:");
+            System.out.println(jwsObject.getHeader().toString());
+            System.out.println(jwsObject.getPayload().toString());
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
+        }        
 
         JWSVerifier jwsVerifier = new JWSVerifier();
 
