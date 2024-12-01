@@ -35,7 +35,6 @@ public class JWSVerifier {
     JWSVerifier() {
 
         String uri = Config.getJWSUri();
-        System.out.println(uri);
 
         HttpClient client = Client.getHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -48,9 +47,7 @@ public class JWSVerifier {
         String body = "";
         try {
             response = client.send(request, BodyHandlers.ofString());
-            System.out.println(response.statusCode());
             body = response.body().toString();
-            System.out.println(body);
 
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -143,6 +140,7 @@ public class JWSVerifier {
         }
 
         // continue with header and payload extraction...
+        System.out.println("accessToken:");
         System.out.println(jwsObject.getHeader().toString());
         System.out.println(jwsObject.getPayload().toString());
 
